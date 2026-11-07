@@ -10,33 +10,92 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as FleetRouteImport } from './routes/fleet'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as SimulationRouteImport } from './routes/simulation'
+import { Route as ThreatsRouteImport } from './routes/threats'
+import { Route as RobotsRobotIdRouteImport } from './routes/robots.$robotId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FleetRoute = FleetRouteImport.update({
+  id: '/fleet',
+  path: '/fleet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SimulationRoute = SimulationRouteImport.update({
+  id: '/simulation',
+  path: '/simulation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ThreatsRoute = ThreatsRouteImport.update({
+  id: '/threats',
+  path: '/threats',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsRobotIdRoute = RobotsRobotIdRouteImport.update({
+  id: '/robots/$robotId',
+  path: '/robots/$robotId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/fleet': typeof FleetRoute
+  '/login': typeof LoginRoute
+  '/simulation': typeof SimulationRoute
+  '/threats': typeof ThreatsRoute
+  '/robots/$robotId': typeof RobotsRobotIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/fleet': typeof FleetRoute
+  '/login': typeof LoginRoute
+  '/simulation': typeof SimulationRoute
+  '/threats': typeof ThreatsRoute
+  '/robots/$robotId': typeof RobotsRobotIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/fleet': typeof FleetRoute
+  '/login': typeof LoginRoute
+  '/simulation': typeof SimulationRoute
+  '/threats': typeof ThreatsRoute
+  '/robots/$robotId': typeof RobotsRobotIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/fleet' | '/login' | '/simulation' | '/threats' | '/robots/$robotId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    '/' | '/fleet' | '/login' | '/simulation' | '/threats' | '/robots/$robotId'
+  id:
+    | '__root__'
+    | '/'
+    | '/fleet'
+    | '/login'
+    | '/simulation'
+    | '/threats'
+    | '/robots/$robotId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  FleetRoute: typeof FleetRoute
+  LoginRoute: typeof LoginRoute
+  SimulationRoute: typeof SimulationRoute
+  ThreatsRoute: typeof ThreatsRoute
+  RobotsRobotIdRoute: typeof RobotsRobotIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +107,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/fleet': {
+      id: '/fleet'
+      path: '/fleet'
+      fullPath: '/fleet'
+      preLoaderRoute: typeof FleetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/simulation': {
+      id: '/simulation'
+      path: '/simulation'
+      fullPath: '/simulation'
+      preLoaderRoute: typeof SimulationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/threats': {
+      id: '/threats'
+      path: '/threats'
+      fullPath: '/threats'
+      preLoaderRoute: typeof ThreatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots/$robotId': {
+      id: '/robots/$robotId'
+      path: '/robots/$robotId'
+      fullPath: '/robots/$robotId'
+      preLoaderRoute: typeof RobotsRobotIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  FleetRoute: FleetRoute,
+  LoginRoute: LoginRoute,
+  SimulationRoute: SimulationRoute,
+  ThreatsRoute: ThreatsRoute,
+  RobotsRobotIdRoute: RobotsRobotIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
