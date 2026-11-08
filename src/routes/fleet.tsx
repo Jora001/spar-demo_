@@ -13,6 +13,7 @@ import { AddRobotWizard } from "@/components/rs/add-robot-wizard";
 import type { Robot } from "@/lib/types";
 
 export const Route = createFileRoute("/fleet")({
+  validateSearch: (search: Record<string, unknown>): {q?: string} => typeof search.q === "string" ? {q: search.q} : {},
   head: () => ({
     meta: [
       { title: "Robot Fleet — RoboShield" },
@@ -43,7 +44,8 @@ const riskLevel = (v: number) => (v >= 70 ? "High" : v >= 40 ? "Medium" : "Low")
 function Fleet() {
   const robots = useStore((s) => s.robots);
   const navigate = useNavigate();
-  const [q, setQ] = useState("");
+  const search = Route.useSearch();
+  const [q, setQ] = useState(search.q ?? "");
   const [vendor, setVendor] = useState("all");
   const [mode, setMode] = useState("all");
   const [status, setStatus] = useState("all");

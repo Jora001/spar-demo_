@@ -54,7 +54,7 @@ export const useStore = create<State>((set, get) => ({
     const e = makeEvent(get().robots);
     set((s) => {
       const tl = [...s.timeline];
-      const last = { ...tl[tl.length - 1] };
+      const last = { ...(tl[tl.length - 1] ?? {label: "Now", threats: 0, blocked: 0}) };
       last.threats += 1;
       if (e.severity !== "info") last.blocked += rand() > 0.15 ? 1 : 0;
       tl[tl.length - 1] = last;
@@ -85,7 +85,7 @@ export const useStore = create<State>((set, get) => ({
   decide: (id, d) =>
     set((s) => ({
       incidents: s.incidents.map((i) =>
-        i.id === id
+        i.id === id && !i.decision
           ? {
               ...i,
               decision: d,
@@ -116,7 +116,7 @@ export const useStore = create<State>((set, get) => ({
       ),
     })),
   addRobot: (r) => set((s) => ({ robots: [r, ...s.robots] })),
-  setExpired: (v) => set({ expired: v }),
+  setExpired: (v) => set((s) => ({ expired: v, robots: s.robots.map(r => ({...r, safeMode: v || r.safeMode === true})) })),
   setPlan: (p) => set({ plan: p, expired: false }),
 }));
 

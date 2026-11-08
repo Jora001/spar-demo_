@@ -29,8 +29,8 @@ const SCENARIOS: { key: string; label: string; icon: React.ElementType; category
   { key: "net", label: "Malicious network connection", icon: Globe, category: "Network anomaly", severity: "high", impact: "Low", confidence: 84, message: "Outbound beacon to known C2 185.220.101.4:4444", response: "Isolate network except safety & management channels" },
 ];
 
-type Phase = "idle" | "running" | "awaiting" | "executing" | "contained";
-interface Log { t: number; text: string; tone?: string }
+type Phase = "idle" | "running" | "awaiting" | "executing" | "contained" | "rejected";
+interface Log { t: number; text: string; tone?: string | undefined }
 
 function Simulation() {
   const robots = useStore((s) => s.robots);
@@ -50,7 +50,9 @@ function Simulation() {
 
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
   const at = (ms: number, fn: () => void) => timers.current.push(setTimeout(fn, ms));
-  const log = (text: string, tone?: string) => setLogs((l) => [...l, { t: Date.now(), text, tone }]);
+  const log = (text: string, tone?: string | undefined) => setLogs((l) => [...l, { t: Date.now(), text, tone }]);
+
+  if (!target) return <p>No robots available for simulation.</p>;
 
   const start = (s: (typeof SCENARIOS)[number]) => {
     timers.current.forEach(clearTimeout);
@@ -80,10 +82,11 @@ function Simulation() {
     if (!sc) return;
     setPhase("executing");
     log("Approved by elmira@roboshield.io", "text-success");
-    decide(incId, "approved");
+
     at(1200, () => log("Response executing on robot agent…"));
     at(2400, () => { log("Safety Controller / E-Stop verified untouched ✔", "text-success"); if (sc.key === "cmd") robotAction(target.id, "safe"); if (sc.key === "net") robotAction(target.id, "isolate"); });
     at(3400, () => {
+      decide(incId, "approved");
       setStep(5); setPhase("contained");
       log(`Status: CONTAINED`, "text-success");
       pushEvent({ robotId: target.id, robotName: target.name, severity: "info", category: "Response", message: `${sc.label} contained` });
@@ -109,12 +112,12 @@ function Simulation() {
           <CardHeader><CardTitle className="flex items-center gap-2 text-base"><Bug className="size-4 text-critical" />Run Demo Attack</CardTitle></CardHeader>
           <CardContent className="space-y-2">
             {SCENARIOS.map((s) => (
-              <button key={s.key} disabled={phase === "running" || phase === "executing"} onClick={() => start(s)}
-                className={cn("flex w-full items-center gap-3 rounded-lg border p-3 text-left text-sm transition hover:border-critical/60 hover:bg-critical/5 disabled:opacity-50", sc?.key === s.key && "border-critical/60 bg-critical/5")}>
+              <Button variant="outline" key={s.key} disabled={phase === "running" || phase === "executing"} onClick={() => start(s)}
+                className={cn("flex h-auto w-full items-center gap-3 whitespace-normal rounded-lg border p-3 text-left text-sm transition hover:border-critical/60 hover:bg-critical/5 disabled:opacity-50", sc?.key === s.key && "border-critical/60 bg-critical/5")}>
                 <s.icon className="size-4 text-critical" />
                 <span className="flex-1">{s.label}</span>
                 <Play className="size-3.5 text-muted-foreground" />
-              </button>
+              </Button>
             ))}
           </CardContent>
         </Card>
@@ -130,21 +133,21 @@ function Simulation() {
               ) : (
                 <div className="space-y-5">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div className="flex items-center gap-2"><SeverityBadge s={sc!.severity} /><span className="font-medium">{sc!.label}</span></div>
+                    <div className="flex items-center gap-2"><SeverityBadge s={sc?.severity ?? "info"} /><span className="font-medium">{sc?.label}</span></div>
                     <span className={cn("rounded-md px-2.5 py-1 text-xs font-bold tracking-wide",
                       phase === "contained" ? "bg-success/15 text-success" : phase === "awaiting" ? "bg-warning/15 text-warning animate-pulse" : "bg-critical/15 text-critical")}>
-                      {phase === "contained" ? "CONTAINED" : phase === "awaiting" ? "AWAITING APPROVAL" : phase === "executing" ? "RESPONDING" : "UNDER ATTACK"}
+                      {phase === "rejected" ? "REJECTED · INVESTIGATING" : phase === "contained" ? "CONTAINED" : phase === "awaiting" ? "AWAITING APPROVAL" : phase === "executing" ? "RESPONDING" : "UNDER ATTACK"}
                     </span>
                   </div>
                   <Pipeline active={step} />
                   {phase === "awaiting" && (
                     <div className="animate-in-up rounded-xl border border-primary/50 bg-primary/5 p-4 shadow-glow">
                       <p className="text-xs uppercase tracking-widest text-muted-foreground">System proposes</p>
-                      <p className="mt-1 font-medium">{sc!.response}</p>
-                      <p className="mt-1 text-xs text-muted-foreground">Safety impact {sc!.impact} · Human-in-the-loop required</p>
+                      <p className="mt-1 font-medium">{sc?.response}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">Safety impact {sc?.impact} · Human-in-the-loop required</p>
                       <div className="mt-3 flex gap-2">
                         <Button onClick={approve}><Check />Approve response</Button>
-                        <Button variant="outline" onClick={() => { log("Rejected by analyst", "text-warning"); setPhase("contained"); decide(incId, "rejected"); }}>Reject</Button>
+                        <Button variant="outline" onClick={() => { log("Rejected by analyst", "text-warning"); setPhase("rejected"); decide(incId, "rejected"); }}>Reject</Button>
                       </div>
                     </div>
                   )}

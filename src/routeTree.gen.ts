@@ -10,15 +10,25 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ArchitectureRouteImport } from './routes/architecture'
 import { Route as FleetRouteImport } from './routes/fleet'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as PoliciesRouteImport } from './routes/policies'
+import { Route as ReportsRouteImport } from './routes/reports'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SimulationRouteImport } from './routes/simulation'
+import { Route as SubscriptionRouteImport } from './routes/subscription'
 import { Route as ThreatsRouteImport } from './routes/threats'
 import { Route as RobotsRobotIdRouteImport } from './routes/robots.$robotId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArchitectureRoute = ArchitectureRouteImport.update({
+  id: '/architecture',
+  path: '/architecture',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FleetRoute = FleetRouteImport.update({
@@ -31,9 +41,29 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PoliciesRoute = PoliciesRouteImport.update({
+  id: '/policies',
+  path: '/policies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SimulationRoute = SimulationRouteImport.update({
   id: '/simulation',
   path: '/simulation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubscriptionRoute = SubscriptionRouteImport.update({
+  id: '/subscription',
+  path: '/subscription',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ThreatsRoute = ThreatsRouteImport.update({
@@ -49,51 +79,96 @@ const RobotsRobotIdRoute = RobotsRobotIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/architecture': typeof ArchitectureRoute
   '/fleet': typeof FleetRoute
   '/login': typeof LoginRoute
+  '/policies': typeof PoliciesRoute
+  '/reports': typeof ReportsRoute
+  '/settings': typeof SettingsRoute
   '/simulation': typeof SimulationRoute
+  '/subscription': typeof SubscriptionRoute
   '/threats': typeof ThreatsRoute
   '/robots/$robotId': typeof RobotsRobotIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/architecture': typeof ArchitectureRoute
   '/fleet': typeof FleetRoute
   '/login': typeof LoginRoute
+  '/policies': typeof PoliciesRoute
+  '/reports': typeof ReportsRoute
+  '/settings': typeof SettingsRoute
   '/simulation': typeof SimulationRoute
+  '/subscription': typeof SubscriptionRoute
   '/threats': typeof ThreatsRoute
   '/robots/$robotId': typeof RobotsRobotIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/architecture': typeof ArchitectureRoute
   '/fleet': typeof FleetRoute
   '/login': typeof LoginRoute
+  '/policies': typeof PoliciesRoute
+  '/reports': typeof ReportsRoute
+  '/settings': typeof SettingsRoute
   '/simulation': typeof SimulationRoute
+  '/subscription': typeof SubscriptionRoute
   '/threats': typeof ThreatsRoute
   '/robots/$robotId': typeof RobotsRobotIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/fleet' | '/login' | '/simulation' | '/threats' | '/robots/$robotId'
+    | '/'
+    | '/architecture'
+    | '/fleet'
+    | '/login'
+    | '/policies'
+    | '/reports'
+    | '/settings'
+    | '/simulation'
+    | '/subscription'
+    | '/threats'
+    | '/robots/$robotId'
   fileRoutesByTo: FileRoutesByTo
   to:
-    '/' | '/fleet' | '/login' | '/simulation' | '/threats' | '/robots/$robotId'
+    | '/'
+    | '/architecture'
+    | '/fleet'
+    | '/login'
+    | '/policies'
+    | '/reports'
+    | '/settings'
+    | '/simulation'
+    | '/subscription'
+    | '/threats'
+    | '/robots/$robotId'
   id:
     | '__root__'
     | '/'
+    | '/architecture'
     | '/fleet'
     | '/login'
+    | '/policies'
+    | '/reports'
+    | '/settings'
     | '/simulation'
+    | '/subscription'
     | '/threats'
     | '/robots/$robotId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ArchitectureRoute: typeof ArchitectureRoute
   FleetRoute: typeof FleetRoute
   LoginRoute: typeof LoginRoute
+  PoliciesRoute: typeof PoliciesRoute
+  ReportsRoute: typeof ReportsRoute
+  SettingsRoute: typeof SettingsRoute
   SimulationRoute: typeof SimulationRoute
+  SubscriptionRoute: typeof SubscriptionRoute
   ThreatsRoute: typeof ThreatsRoute
   RobotsRobotIdRoute: typeof RobotsRobotIdRoute
 }
@@ -105,6 +180,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/architecture': {
+      id: '/architecture'
+      path: '/architecture'
+      fullPath: '/architecture'
+      preLoaderRoute: typeof ArchitectureRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/fleet': {
@@ -121,11 +203,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/policies': {
+      id: '/policies'
+      path: '/policies'
+      fullPath: '/policies'
+      preLoaderRoute: typeof PoliciesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/simulation': {
       id: '/simulation'
       path: '/simulation'
       fullPath: '/simulation'
       preLoaderRoute: typeof SimulationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/subscription': {
+      id: '/subscription'
+      path: '/subscription'
+      fullPath: '/subscription'
+      preLoaderRoute: typeof SubscriptionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/threats': {
@@ -147,9 +257,14 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ArchitectureRoute: ArchitectureRoute,
   FleetRoute: FleetRoute,
   LoginRoute: LoginRoute,
+  PoliciesRoute: PoliciesRoute,
+  ReportsRoute: ReportsRoute,
+  SettingsRoute: SettingsRoute,
   SimulationRoute: SimulationRoute,
+  SubscriptionRoute: SubscriptionRoute,
   ThreatsRoute: ThreatsRoute,
   RobotsRobotIdRoute: RobotsRobotIdRoute,
 }

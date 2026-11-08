@@ -5,7 +5,11 @@ export function rand() {
   seed = (seed * 16807) % 2147483647;
   return (seed - 1) / 2147483646;
 }
-export const pick = <T,>(arr: T[]) => arr[Math.floor(rand() * arr.length)];
+export const pick = <T,>(arr: T[]): T => {
+  const item = arr[Math.floor(rand() * arr.length)];
+  if (item === undefined) throw new Error("Cannot sample empty demo data");
+  return item;
+};
 const hex = (n: number) =>
   Array.from({ length: n }, () => Math.floor(rand() * 16).toString(16)).join("");
 
@@ -36,10 +40,10 @@ const NOW = Date.now();
 
 export function makeRobots(): Robot[] {
   return NAMES.map((n, i) => {
-    const kind = KINDS[i % 3];
-    const vendor = VENDORS[i % 4];
+    const kind = (KINDS[i % 3] ?? "AMR");
+    const vendor = (VENDORS[i % 4] ?? "Vendor A");
     const os = vendor === "Vendor B" ? "Vendor RTOS" : vendor === "Custom API" ? pick(["Yocto Linux", "Windows IoT"]) : pick(OS.slice(0, 2));
-    const mode: ProtectionMode = os === "Vendor RTOS" ? "Gateway" : vendor === "Custom API" ? "SDK/API" : pick(["Agent", "Agent", "SDK/API"]);
+    const mode: ProtectionMode = os === "Vendor RTOS" ? "Gateway" : vendor === "Custom API" ? "SDK/API" : pick<ProtectionMode>(["Agent", "Agent", "SDK/API"]);
     const r = rand();
     const connection = r < 0.75 ? "Online" : r < 0.88 ? "Offline-Protected" : "Offline";
     const prefix = kind === "AMR" ? "AMR" : kind === "Robotic Arm" ? "ARM" : "QDR";
@@ -54,7 +58,7 @@ export function makeRobots(): Robot[] {
       connection,
       risk: Math.round(5 + rand() * (i % 5 === 0 ? 85 : 45)),
       lastSeen: NOW - Math.floor(rand() * (connection === "Online" ? 60 : 7200)) * 1000,
-      site: SITES[i % 3].name,
+      site: (SITES[i % 3]?.name ?? "Factory A"),
       battery: Math.round(25 + rand() * 75),
       uptimeH: Math.round(rand() * 900),
       firmware: `v${1 + (i % 3)}.${Math.floor(rand() * 9)}.${Math.floor(rand() * 20)}`,
@@ -106,7 +110,7 @@ export function makeIncidents(robots: Robot[]): Incident[] {
     { title: "Lateral movement attempt", category: "Network anomaly", severity: "low", confidence: 58, status: "Resolved", impact: "Low", explanation: "Scan blocked at gateway; no access gained.", recommendedAction: "Keep monitoring" },
   ];
   return defs.map((d, i) => {
-    const r = robots[(i * 5) % robots.length];
+    const r = robots[(i * 5) % robots.length] ?? pick(robots);
     const createdAt = NOW - (i + 1) * 47 * 60_000;
     return {
       ...d,

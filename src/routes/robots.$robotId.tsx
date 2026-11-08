@@ -38,6 +38,7 @@ function useTelemetry() {
     const id = setInterval(() => {
       setData((d) => {
         const l = d[d.length - 1];
+        if (!l) return d;
         const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
         return [...d.slice(1), {
           t: l.t + 1, cpu: clamp(l.cpu + (Math.random() - 0.5) * 12, 5, 95), mem: clamp(l.mem + (Math.random() - 0.5) * 4, 30, 90),
@@ -51,7 +52,7 @@ function useTelemetry() {
 }
 
 function Mini({ title, data, k, unit, color }: { title: string; data: Record<string, number>[]; k: string; unit: string; color: string }) {
-  const last = data[data.length - 1][k];
+  const last = data[data.length - 1]?.[k] ?? 0;
   return (
     <Card>
       <CardHeader className="flex-row items-baseline justify-between pb-0">
@@ -81,7 +82,8 @@ const ACTIONS: { a: RobotAction; label: string; icon: React.ElementType; critica
 function RobotDetail() {
   const { robotId } = Route.useParams();
   const robot = useStore((s) => s.robots.find((r) => r.id === robotId));
-  const events = useStore((s) => s.events.filter((e) => e.robotId === robotId));
+  const allEvents = useStore((s) => s.events);
+  const events = allEvents.filter((e) => e.robotId === robotId);
   const robotAction = useStore((s) => s.robotAction);
   const pushEvent = useStore((s) => s.pushEvent);
   const tel = useTelemetry();
@@ -128,8 +130,8 @@ function RobotDetail() {
       </div>
 
       <div className="grid gap-4 xl:grid-cols-[1fr_300px]">
-        <Tabs defaultValue="overview">
-          <TabsList className="flex-wrap">
+        <Tabs defaultValue="overview" className="min-w-0">
+          <TabsList className="h-auto flex-wrap justify-start">
             {["overview", "telemetry", "processes", "network", "firmware", "vulnerabilities", "events"].map((t) => (
               <TabsTrigger key={t} value={t} className="capitalize">{t === "firmware" ? "Firmware & Integrity" : t === "events" ? "Security Events" : t}</TabsTrigger>
             ))}

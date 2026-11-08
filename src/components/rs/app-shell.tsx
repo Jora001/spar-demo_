@@ -50,7 +50,7 @@ export function Logo({ compact }: { compact?: boolean }) {
       {!compact && (
         <div className="leading-tight">
           <p className="font-display text-sm font-bold">RoboShield</p>
-          <p className="text-[10px] uppercase tracking-widest text-muted-foreground">RCaaS</p>
+          <p className="text-[10px] uppercase tracking-widest opacity-60">RCaaS</p>
         </div>
       )}
     </div>
@@ -89,11 +89,11 @@ function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         {state !== "collapsed" && (
-          <div className="rounded-lg border bg-surface p-3 text-xs">
+          <div className="rounded-lg border border-sidebar-border bg-sidebar-accent/20 p-3 text-xs">
             <div className="flex items-center gap-2 font-medium text-success">
               <Activity className="size-3.5" /> All engines operational
             </div>
-            <p className="mt-1 text-muted-foreground">EDR · IDS/IPS · Integrity</p>
+            <p className="mt-1 opacity-60">EDR · IDS/IPS · Integrity</p>
           </div>
         )}
       </SidebarFooter>
@@ -102,7 +102,7 @@ function AppSidebar() {
 }
 
 function ThemeToggle() {
-  const [dark, setDark] = useState(true);
+  const [dark, setDark] = useState(false);
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
   }, [dark]);
@@ -177,7 +177,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <SidebarTrigger />
             <div className="relative hidden max-w-sm flex-1 md:block">
               <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
-              <Input placeholder="Search robots, incidents, CVEs…" className="h-9 pl-8" />
+              <Input placeholder="Search robots…" className="h-9 bg-card pl-8" onKeyDown={(e) => { if(e.key === "Enter") navigate({to: "/fleet", search: {q: e.currentTarget.value}}); }} />
             </div>
             <div className="ml-auto flex items-center gap-1.5">
               <span className="rounded-md border border-warning/40 bg-warning/10 px-2 py-0.5 text-[10px] font-bold tracking-widest text-warning">
@@ -192,11 +192,11 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Bellmenu />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="ml-1 rounded-full" aria-label="Account">
+                  <Button variant="ghost" size="icon" className="ml-1 rounded-full" aria-label="Account">
                     <Avatar className="size-8">
                       <AvatarFallback className="bg-accent text-xs">EP</AvatarFallback>
                     </Avatar>
-                  </button>
+                  </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>
