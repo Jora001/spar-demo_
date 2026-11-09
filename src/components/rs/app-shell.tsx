@@ -201,7 +201,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>
                     Jora Hovsepyan
-                    <p className="text-xs font-normal text-muted-foreground">SOC Lead · Acme Robotics</p>
+                    <p className="text-xs font-normal text-muted-foreground">Clinical SAS Programmer</p>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => navigate({ to: "/settings" })}>
