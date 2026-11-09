@@ -104,7 +104,7 @@ function RobotDetail() {
 
   const run = (x: (typeof ACTIONS)[number]) => {
     robotAction(robot.id, x.a);
-    pushEvent({ robotId: robot.id, robotName: robot.name, severity: "info", category: "Response", message: `${x.label} executed by elmira@roboshield.io` });
+    pushEvent({ robotId: robot.id, robotName: robot.name, severity: "info", category: "Response", message: `${x.label} executed by jora@roboshield.io` });
     toast.success(`${x.label} executed`, { description: robot.name });
   };
 

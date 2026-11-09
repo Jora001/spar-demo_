@@ -194,13 +194,13 @@ export function AppShell({ children }: { children: ReactNode }) {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="ml-1 rounded-full" aria-label="Account">
                     <Avatar className="size-8">
-                      <AvatarFallback className="bg-accent text-xs">EP</AvatarFallback>
+                      <AvatarFallback className="bg-accent text-xs">JH</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>
-                    Elmira Papoyan
+                    Jora Hovsepyan
                     <p className="text-xs font-normal text-muted-foreground">SOC Lead · Acme Robotics</p>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />

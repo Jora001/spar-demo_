@@ -45,7 +45,7 @@ function Login() {
             <h2 className="text-xl font-semibold">Welcome back</h2>
             <p className="mb-6 text-sm text-muted-foreground">Demo: any credentials work.</p>
             <form onSubmit={go} className="space-y-4">
-              <div className="space-y-1.5"><Label>Email</Label><Input defaultValue="elmira@roboshield.io" /></div>
+              <div className="space-y-1.5"><Label>Email</Label><Input defaultValue="jora@roboshield.io" /></div>
               <div className="space-y-1.5"><Label>Password</Label><Input type="password" defaultValue="demo-password" /></div>
               <Button type="submit" className="w-full">Sign in</Button>
             </form>

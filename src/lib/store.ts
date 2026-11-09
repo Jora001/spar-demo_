@@ -76,7 +76,7 @@ export const useStore = create<State>((set, get) => ({
     set((s) => ({ notifications: [{ id: uid("n"), time: Date.now(), title, severity, read: false }, ...s.notifications].slice(0, 30) })),
   markAllRead: () => set((s) => ({ notifications: s.notifications.map((x) => ({ ...x, read: true })) })),
   addIncident: (i) => set((s) => ({ incidents: [i, ...s.incidents] })),
-  setIncidentStatus: (id, status, actor = "elmira@roboshield.io") =>
+  setIncidentStatus: (id, status, actor = "jora@roboshield.io") =>
     set((s) => ({
       incidents: s.incidents.map((i) =>
         i.id === id ? { ...i, status, audit: [...i.audit, { time: Date.now(), actor, text: `Status changed to ${status}` }] } : i,
@@ -97,7 +97,7 @@ export const useStore = create<State>((set, get) => ({
               status: d === "approved" ? "Contained" : "Investigating",
               audit: [
                 ...i.audit,
-                { time: Date.now(), actor: "elmira@roboshield.io", text: d === "approved" ? `Approved: ${i.recommendedAction}` : "Rejected recommended action" },
+                { time: Date.now(), actor: "jora@roboshield.io", text: d === "approved" ? `Approved: ${i.recommendedAction}` : "Rejected recommended action" },
                 ...(d === "approved" ? [{ time: Date.now() + 1, actor: "Response Engine", text: "Response executed. Safety Controller untouched." }] : []),
               ],
             }

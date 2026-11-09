@@ -121,7 +121,7 @@ export function makeIncidents(robots: Robot[]): Incident[] {
       audit: [
         { time: createdAt, actor: "Detection Engine", text: `Incident created from correlated ${d.category.toLowerCase()} events` },
         { time: createdAt + 30_000, actor: "Risk Engine", text: `Severity ${d.severity}, confidence ${d.confidence}%` },
-        ...(d.status !== "New" ? [{ time: createdAt + 300_000, actor: "elmira@roboshield.io", text: "Status changed to Investigating" }] : []),
+        ...(d.status !== "New" ? [{ time: createdAt + 300_000, actor: "jora@roboshield.io", text: "Status changed to Investigating" }] : []),
       ],
     };
   });

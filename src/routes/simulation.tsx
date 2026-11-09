@@ -83,7 +83,7 @@ function Simulation() {
   const approve = () => {
     if (!sc) return;
     setPhase("executing");
-    log("Approved by elmira@roboshield.io", "text-success");
+    log("Approved by jora@roboshield.io", "text-success");
 
     at(1200, () => log("Response executing on robot agent…"));
     at(2400, () => { log("Safety Controller / E-Stop verified untouched ✔", "text-success"); if (sc.key === "cmd") robotAction(target.id, "safe"); if (sc.key === "net") robotAction(target.id, "isolate"); });
