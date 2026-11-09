@@ -10,6 +10,8 @@ import { useStore } from "@/lib/store";
 export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Sign in — RoboShield" },
       { name: "description", content: "Sign in to the RoboShield robot cybersecurity console." },
       { property: "og:title", content: "Sign in — RoboShield" },
@@ -35,7 +37,7 @@ function Login() {
           <h1 className="text-4xl font-semibold leading-tight">Cybersecurity for robots that never compromises physical safety.</h1>
           <p className="mt-4 max-w-md text-muted-foreground">EDR, IDS/IPS, integrity monitoring and human-approved response for every robot in your fleet.</p>
         </div>
-        <p className="flex items-center gap-2 text-xs text-muted-foreground"><ShieldCheck className="size-4 text-primary" />SOC 2 · IEC 62443 aligned</p>
+        <p className="flex items-center gap-2 text-xs text-muted-foreground"><ShieldCheck className="size-4 text-primary" />Safety-first robot protection · Demo</p>
       </div>
       <div className="flex items-center justify-center p-6">
         <Card className="w-full max-w-sm">

@@ -84,6 +84,11 @@ export const useStore = create<State>((set, get) => ({
     })),
   decide: (id, d) =>
     set((s) => ({
+      robots: s.robots.map(r => {
+        const inc = s.incidents.find(i => i.id === id && !i.decision);
+        if (!inc || d !== "approved" || inc.robotId !== r.id) return r;
+        return { ...r, safeMode: r.safeMode === true || inc.category === "Unauthorized command", isolated: r.isolated === true || inc.category === "Network anomaly", risk: Math.max(5, r.risk - 20) };
+      }),
       incidents: s.incidents.map((i) =>
         i.id === id && !i.decision
           ? {
@@ -117,7 +122,7 @@ export const useStore = create<State>((set, get) => ({
     })),
   addRobot: (r) => set((s) => ({ robots: [r, ...s.robots] })),
   setExpired: (v) => set((s) => ({ expired: v, robots: s.robots.map(r => ({...r, safeMode: v || r.safeMode === true})) })),
-  setPlan: (p) => set({ plan: p, expired: false }),
+  setPlan: (p) => { get().setExpired(false); set({ plan: p }); },
 }));
 
 export function fleetScore(rs: Robot[]) {

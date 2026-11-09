@@ -13,6 +13,8 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/simulation")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Attack Simulation — RoboShield" },
       { name: "description", content: "Run live demo attacks and watch RoboShield detect, assess and contain them." },
       { property: "og:title", content: "Attack Simulation — RoboShield" },

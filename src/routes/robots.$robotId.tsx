@@ -15,12 +15,15 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useStore, type RobotAction } from "@/lib/store";
 import { ConnBadge, EventRow, ModeBadge, RiskPill, SeverityBadge } from "@/components/rs/badges";
 import { CVES } from "@/lib/mock-data";
-import { tip } from "./index";
+import { chartTip as tip } from "@/lib/page-meta";
+import { RobotImage } from "@/components/rs/robot-image";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/robots/$robotId")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Robot detail — RoboShield" },
       { name: "description", content: "Status, telemetry, integrity and response actions for a protected robot." },
       { property: "og:title", content: "Robot detail — RoboShield" },
@@ -117,7 +120,7 @@ function RobotDetail() {
   return (
     <div>
       <Link to="/fleet" className="mb-3 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"><ArrowLeft className="size-4" />Fleet</Link>
-      <div className="mb-6 flex flex-wrap items-center gap-4">
+      <div className="mb-6 flex flex-wrap items-center gap-4"><RobotImage kind={robot.kind} className="size-20"/>
         <div>
           <h1 className="text-2xl font-semibold">{robot.name}</h1>
           <p className="text-sm text-muted-foreground">{robot.vendor} · {robot.kind} · {robot.os}</p>

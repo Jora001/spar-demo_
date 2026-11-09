@@ -28,3 +28,7 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Application structure
+- Keep all demo state in the client Zustand store and mock-data module; shared actions must update cross-page views consistently.
+- Content pages use TanStack file routes with shared shell and leaf metadata; do not introduce backend services for this presentation demo.

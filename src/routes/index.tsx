@@ -1,15 +1,24 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { Bot, Factory, ShieldAlert, ShieldBan, Wifi } from "lucide-react";
+import { Bot, Factory, ShieldAlert, ShieldBan, Wifi, Plus, ShieldCheck, ArrowRight, Crown } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useStore, fleetScore } from "@/lib/store";
 import { EventRow, PageHeader } from "@/components/rs/badges";
 import { SITES, THREAT_CATEGORIES } from "@/lib/mock-data";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { AddRobotWizard } from "@/components/rs/add-robot-wizard";
+import { RobotImage } from "@/components/rs/robot-image";
+import mascot from "@/assets/shield-robot.png";
+import { chartTip } from "@/lib/page-meta";
+import { ConnBadge, ModeBadge } from "@/components/rs/badges";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Dashboard — RoboShield" },
       { name: "description", content: "Live overview of robot fleet security: threats, blocked attacks and fleet security score." },
       { property: "og:title", content: "Dashboard — RoboShield" },
@@ -19,17 +28,15 @@ export const Route = createFileRoute("/")({
   component: Dashboard,
 });
 
-export const tip = {
-  contentStyle: { background: "var(--popover)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12, color: "var(--popover-foreground)" },
-};
+export const tip = chartTip;
 
 function Kpi({ label, value, sub, icon: Icon, tone = "text-primary" }: { label: string; value: React.ReactNode; sub?: string; icon: React.ElementType; tone?: string }) {
   return (
-    <Card className="animate-in-up">
+    <Card className={cn("animate-in-up", tone === "text-critical" ? "bg-critical/5" : tone === "text-warning" ? "bg-warning/5" : "bg-info/5")}>
       <CardContent className="p-4">
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           {label}
-          <Icon className={cn("size-4", tone)} />
+          <span className={cn("grid size-9 place-items-center rounded-lg bg-card", tone)}><Icon className="size-5" /></span>
         </div>
         <p className="mt-2 font-display text-3xl font-semibold tabular-nums">{value}</p>
         {sub && <p className="mt-1 text-xs text-muted-foreground">{sub}</p>}
@@ -56,6 +63,8 @@ export function Gauge({ value, size = 110 }: { value: number; size?: number }) {
 }
 
 function Dashboard() {
+  const [onboard, setOnboard] = useState(false);
+  const plan = useStore(s=>s.plan);
   const robots = useStore((s) => s.robots);
   const events = useStore((s) => s.events);
   const incidents = useStore((s) => s.incidents);
@@ -69,7 +78,7 @@ function Dashboard() {
 
   return (
     <div>
-      <PageHeader title="Security Overview" sub="Real-time posture across all protected robots" />
+      <PageHeader title="Fleet Overview" sub="Your robot fleet, secure and protected"><span className="flex items-center gap-2 rounded-full bg-success/10 px-3 py-2 text-xs font-medium text-success"><ShieldCheck className="size-4"/>Local protection active</span></PageHeader>
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
         <Kpi label="Protected Robots" value={robots.length} sub="across 3 sites" icon={Bot} />
         <Kpi label="Online / Offline" value={<>{online}<span className="text-muted-foreground"> / {robots.length - online}</span></>} sub="Offline robots stay protected locally" icon={Wifi} tone="text-info" />
@@ -83,6 +92,12 @@ function Dashboard() {
         </Card>
       </div>
 
+
+      <div className="mt-5 grid gap-5 lg:grid-cols-[1.25fr_1fr]">
+        <Card><CardHeader className="flex-row items-center justify-between pb-2"><CardTitle className="flex items-center gap-2 text-base"><Bot className="size-5 text-primary"/>Your Robots</CardTitle><Button variant="link" size="sm" asChild><Link to="/fleet">View all <ArrowRight/></Link></Button></CardHeader><CardContent>{robots.slice(0,4).map(r=><Link to="/robots/$robotId" params={{robotId:r.id}} key={r.id} className="flex items-center gap-3 border-b py-2 last:border-0"><RobotImage kind={r.kind} className="size-12 shrink-0"/><div className="min-w-0 flex-1"><p className="truncate text-sm font-semibold">{r.name}</p><p className="text-xs text-muted-foreground">{r.vendor}</p></div><span className="hidden sm:block"><ConnBadge c={r.connection}/></span><span className="hidden md:block"><ModeBadge m={r.mode}/></span><ArrowRight className="size-3 text-muted-foreground"/></Link>)}</CardContent></Card>
+        <div className="flex flex-col gap-5"><div className="relative flex min-h-48 items-center overflow-hidden rounded-lg bg-primary p-6 text-primary-foreground"><div className="relative z-10 max-w-[60%]"><h2 className="text-xl font-semibold">Add a New Robot</h2><p className="mb-4 mt-2 text-sm opacity-80">Expand your protected fleet.</p><Button variant="secondary" onClick={()=>setOnboard(true)}><Plus/>Add Robot</Button></div><img src={mascot} alt="RoboShield robot with a protection shield" width={816} height={816} className="absolute -bottom-4 right-0 h-56 w-48 object-contain"/></div><div className="flex items-center justify-between rounded-lg border bg-card p-4"><div className="flex items-center gap-3"><Crown className="size-6 text-primary"/><div><p className="font-semibold">{plan} plan</p><p className="text-xs text-muted-foreground">Fleet-wide security entitlements</p></div></div><Button variant="outline" size="sm" asChild><Link to="/subscription">Manage</Link></Button></div></div>
+      </div>
+      <AddRobotWizard open={onboard} onOpenChange={setOnboard}/>
       <div className="mt-4 grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardHeader className="flex-row items-center justify-between pb-2">
@@ -109,15 +124,15 @@ function Dashboard() {
         <Card>
           <CardHeader className="pb-2"><CardTitle className="text-base">Protection modes</CardTitle></CardHeader>
           <CardContent className="h-64">
-            <ResponsiveContainer>
+            <div className="h-52"><ResponsiveContainer>
               <PieChart>
                 <Pie data={modes} dataKey="value" nameKey="name" innerRadius={55} outerRadius={85} paddingAngle={3} stroke="none">
                   {modes.map((_, i) => <Cell key={i} fill={colors[i]} />)}
                 </Pie>
                 <Tooltip {...tip} />
               </PieChart>
-            </ResponsiveContainer>
-            <div className="-mt-4 flex justify-center gap-4 text-xs">
+            </ResponsiveContainer></div>
+            <div className="flex flex-wrap justify-center gap-3 text-xs">
               {modes.map((m, i) => (
                 <span key={m.name} className="flex items-center gap-1.5"><span className="size-2 rounded-full" style={{ background: colors[i] }} />{m.name} · {m.value}</span>
               ))}

@@ -184,3 +184,6 @@
 [data-slot="sidebar-menu-button"][data-active="true"] { background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); }
 [data-slot="sidebar"] [data-slot="sidebar-group-label"] { color: color-mix(in oklab, var(--sidebar-foreground) 60%, transparent); }
 [data-slot="card"] { box-shadow: 0 2px 5px color-mix(in oklab, var(--foreground) 5%, transparent); }
+
+[data-slot="card"], .recharts-responsive-container { min-width: 0; }
+.grid > * { min-width: 0; }

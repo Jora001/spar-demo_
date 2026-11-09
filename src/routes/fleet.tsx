@@ -10,12 +10,15 @@ import { useStore } from "@/lib/store";
 import { ConnBadge, ModeBadge, PageHeader, RiskPill, ago } from "@/components/rs/badges";
 import { MODES, VENDORS } from "@/lib/mock-data";
 import { AddRobotWizard } from "@/components/rs/add-robot-wizard";
+import { RobotImage } from "@/components/rs/robot-image";
 import type { Robot } from "@/lib/types";
 
 export const Route = createFileRoute("/fleet")({
-  validateSearch: (search: Record<string, unknown>): {q?: string} => typeof search.q === "string" ? {q: search.q} : {},
+  validateSearch: (search: Record<string, unknown>): {q?: string} => typeof search["q"] === "string" ? {q: search["q"]} : {},
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Robot Fleet — RoboShield" },
       { name: "description", content: "Device registry of every protected robot with vendor, protection mode and risk score." },
       { property: "og:title", content: "Robot Fleet — RoboShield" },
@@ -104,9 +107,9 @@ function Fleet() {
           <TableBody>
             {rows.map((r: Robot) => (
               <TableRow key={r.id} className="cursor-pointer" onClick={() => navigate({ to: "/robots/$robotId", params: { robotId: r.id } })}>
-                <TableCell>
+                <TableCell><div className="flex items-center gap-3"><RobotImage kind={r.kind} className="size-10"/><div>
                   <p className="font-medium">{r.name}</p>
-                  <p className="text-xs text-muted-foreground">{r.kind} · {r.site}</p>
+                  <p className="text-xs text-muted-foreground">{r.kind} · {r.site}</p></div></div>
                 </TableCell>
                 <TableCell className="font-mono text-xs text-muted-foreground">{r.uuid.slice(0, 13)}…</TableCell>
                 <TableCell>{r.vendor}</TableCell>

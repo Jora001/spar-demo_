@@ -18,7 +18,7 @@ export function AddRobotWizard({ open, onOpenChange }: { open: boolean; onOpenCh
   const [step, setStep] = useState(0);
   const [name, setName] = useState("AMR-Nimbus-25");
   const [vendor, setVendor] = useState("Vendor A");
-  const [os, setOs] = useState(OS_OPTS[0]);
+  const [os, setOs] = useState(OS_OPTS[0] ?? "Ubuntu 22.04 + ROS 2 Humble");
   const [audit, setAudit] = useState(0);
   const [done, setDone] = useState(false);
 
@@ -28,7 +28,7 @@ export function AddRobotWizard({ open, onOpenChange }: { open: boolean; onOpenCh
     { label: "Security agent support", ok: os.startsWith("Ubuntu") },
     { label: "Network position for gateway", ok: true },
   ];
-  const mode: ProtectionMode = checks[2].ok ? "Agent" : checks[1].ok ? "SDK/API" : "Gateway";
+  const mode: ProtectionMode = checks[2]?.ok ? "Agent" : checks[1]?.ok ? "SDK/API" : "Gateway";
   const why = {
     Agent: "Full OS access available. The on-robot agent gives deepest visibility: processes, files, network and EDR — and keeps protecting offline.",
     "SDK/API": "No agent support, but the vendor SDK exposes status and command APIs. We secure the command channel and monitor telemetry.",
