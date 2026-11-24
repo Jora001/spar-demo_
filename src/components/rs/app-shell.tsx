@@ -49,7 +49,7 @@ export function Logo({ compact }: { compact?: boolean }) {
       </div>
       {!compact && (
         <div className="leading-tight">
-          <p className="font-display text-sm font-bold">RoboShield</p>
+          <p className="font-display text-sm font-bold">SPAR</p>
           <p className="text-[10px] uppercase tracking-widest opacity-60">RCaaS</p>
         </div>
       )}

@@ -15,9 +15,9 @@ export const Route = createFileRoute("/simulation")({
     meta: [
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { title: "Attack Simulation — RoboShield" },
-      { name: "description", content: "Run live demo attacks and watch RoboShield detect, assess and contain them." },
-      { property: "og:title", content: "Attack Simulation — RoboShield" },
+      { title: "Attack Simulation — SPAR" },
+      { name: "description", content: "Run live demo attacks and watch SPAR detect, assess and contain them." },
+      { property: "og:title", content: "Attack Simulation — SPAR" },
       { property: "og:description", content: "Run live demo attacks against a robot." },
     ],
   }),
@@ -64,7 +64,7 @@ function Simulation() {
     setIncId(id);
     log(`Attack launched against ${target.name}`, "text-critical");
     at(900, () => { pushEvent({ robotId: target.id, robotName: target.name, severity: s.severity, category: s.category, message: s.message }); log(`Event captured: ${s.message}`); setStep(1); });
-    at(2200, () => { log("Telemetry normalized to RoboShield schema (OCSF)"); setStep(2); });
+    at(2200, () => { log("Telemetry normalized to SPAR schema (OCSF)"); setStep(2); });
     at(3600, () => { log(`Detection: ${s.category} rule matched + behavior anomaly correlated`, "text-warning"); setStep(3); });
     at(5000, () => {
       log(`Risk: ${s.severity.toUpperCase()} · confidence ${s.confidence}% · safety impact ${s.impact}`, "text-warning");
@@ -83,7 +83,7 @@ function Simulation() {
   const approve = () => {
     if (!sc) return;
     setPhase("executing");
-    log("Approved by jora@roboshield.io", "text-success");
+    log("Approved by jora@SPAR.io", "text-success");
 
     at(1200, () => log("Response executing on robot agent…"));
     at(2400, () => { log("Safety Controller / E-Stop verified untouched ✔", "text-success"); if (sc.key === "cmd") robotAction(target.id, "safe"); if (sc.key === "net") robotAction(target.id, "isolate"); });

@@ -103,7 +103,7 @@ export function AddRobotWizard({ open, onOpenChange }: { open: boolean; onOpenCh
           <div className="space-y-3 text-sm">
             <p>Run on the robot (or gateway host):</p>
             <pre className="overflow-auto rounded-lg border bg-surface p-3 font-mono text-xs">
-{mode === "Agent" ? `curl -sSL https://get.roboshield.io | sudo bash -s -- \\\n  --token rs_live_8f2a… --mode agent` : mode === "SDK/API" ? `pip install roboshield-connector\nroboshield connect --vendor-api https://robot.local/api --token rs_live_8f2a…` : `rs-gateway enroll --robot ${name} --inline eth1 --token rs_live_8f2a…`}
+{mode === "Agent" ? `curl -sSL https://get.SPAR.io | sudo bash -s -- \\\n  --token rs_live_8f2a… --mode agent` : mode === "SDK/API" ? `pip install roboshield-connector\nroboshield connect --vendor-api https://robot.local/api --token rs_live_8f2a…` : `rs-gateway enroll --robot ${name} --inline eth1 --token rs_live_8f2a…`}
             </pre>
           </div>
         )}
